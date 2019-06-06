@@ -38,6 +38,8 @@ impl<'a> Datum<'a> {
         Datum::Function_(Arc::new(f))
     }
     
+    pub fn none() -> Self { Datum::None_ }
+    
     pub fn table() -> Self {
         Datum::Table_(
             TableType::new(HashMap::new())
