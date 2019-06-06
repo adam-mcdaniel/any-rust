@@ -1,4 +1,5 @@
 use std::fmt::{Display, Error, Formatter};
+use std::cell::{RefCell};
 use std::ops::{Index,IndexMut};
 use crate::Datum;
 
@@ -13,7 +14,6 @@ impl<'a> Display for Datum<'a> {
             Table_(_) => write!(f, "<Table>"),
             Function_(_) => write!(f, "<Fn>"),
             None_ => write!(f, "<None>"),
-            _ => write!(f, ""),
         }
     }
 }
@@ -43,29 +43,72 @@ impl<'a> From<Datum<'a>> for f64 {
 impl<'a, 'b> Index<Datum<'b>> for Datum<'a> {
     type Output = Datum<'a>;
 
-    fn index(&'a self, index: Datum<'b>) -> &'a Self::Output {
+    fn index(&self, index: Datum<'b>) -> &Self::Output {
         use Datum::*;
         match index {
             Number_(n) => {
-
+                match self {
+                    Collection_(c) => &c[n as i32 as usize],
+                    _ => self
+                }
             },
+
             String_(s) => {
-
+                match self {
+                    Table_(rf) =>{
+                        unsafe {
+                            match (*rf.as_ptr()).get(&s.to_string()) {
+                                Some(rf) => &*rf.as_ptr(),
+                                None => {
+                                    (*rf.as_ptr()).insert(s.to_string(), RefCell::new(Datum::none()));
+                                    &*(*rf.as_ptr()).get(&s.to_string()).unwrap().as_ptr()
+                                }
+                            }
+                        }
+                    },
+                    _ => self
+                }
             },
+            
             _ => {
-
+                self
             }
         }
-        Datum::none()
     }
 }
 
-// impl IndexMut<Side> for Balance {
-//     fn index_mut<'a>(&'a mut self, index: Side) -> &'a mut Self::Output {
-//         println!("Accessing {:?}-side of balance mutably", index);
-//         match index {
-//             Side::Left => &mut self.left,
-//             Side::Right => &mut self.right,
-//         }
-//     }
-// }
+
+impl<'a, 'b> IndexMut<Datum<'b>> for Datum<'a> {
+    fn index_mut(&mut self, index: Datum<'b>) -> &mut Self::Output {
+        use Datum::*;
+        match index {
+            Number_(n) => {
+                match self {
+                    Collection_(c) => &mut c[n as i32 as usize],
+                    _ => self
+                }
+            },
+
+            String_(s) => {
+                match self {
+                    Table_(rf) =>{
+                        unsafe {
+                            match (*rf.as_ptr()).get(&s.to_string()) {
+                                Some(rf) => &mut (*rf.as_ptr()),
+                                None => {
+                                    (*rf.as_ptr()).insert(s.to_string(), RefCell::new(Datum::table()));
+                                    &mut (*(*rf.as_ptr()).get(&s.to_string()).unwrap().as_ptr())
+                                }
+                            }
+                        }
+                    },
+                    _ => self
+                }
+            },
+            
+            _ => {
+                self
+            }
+        }
+    }
+}

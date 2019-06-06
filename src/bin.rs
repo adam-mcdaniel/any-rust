@@ -3,21 +3,36 @@ use any_rust::Datum as any;
 
 fn main() {
 
-    let c = any::collection(vec![
-            any::string("five"),
-            any::number(123),
-            any::function(|d| {
-                d
-            }),
-        ]);
+    // let c = any::collection(vec![
+    //         any::string("five"),
+    //         any::number(123),
+    //         any::function(|d| {
+    //             d
+    //         }),
+    //     ]);
 
-    println!("collection: {}", c);
+    // println!("collection: {}", c.clone());
+    // println!("index: {}", c.clone()[any::number(2)]);
 
-    let n = any::number(5.1);
+    // let n = any::number(5.1);
+    // println!(
+    //     "int: '{}'\nfloat: '{}'",
+    //     i32::from(n.clone()),
+    //     f64::from(n.clone()),
+    // );
+
+    let mut a = any::table();
+    a[any::string("five")] = any::number(7);
+    a = any::number(5);
+
+    let mut b = any::table();
+    b[any::string("test")]
+        [any::string("whoa")] = a;
+
     println!(
-        "int: '{}'\nfloat: '{}'",
-        i32::from(n.clone()),
-        f64::from(n.clone()),
+        "b/test/whoa = {}",
+        b[any::string("test")]
+            [any::string("whoa")]
     );
 
     // let f = |t: &Table| {
