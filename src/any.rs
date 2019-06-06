@@ -1,4 +1,4 @@
-use std::cell::{RefCell,};
+use std::cell::{RefCell};
 use std::collections::HashMap;
 use std::sync::Arc;
 
@@ -13,7 +13,7 @@ macro_rules! args {
 #[macro_export]
 macro_rules! returns {
     ($($e:expr),+) => {
-        any::collection(vec![$($e),+])
+        args!($($e),*)
     };
 }
 

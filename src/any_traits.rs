@@ -1,7 +1,6 @@
 use std::fmt::{Display, Error, Formatter};
 use std::sync::Arc;
 use std::cell::{RefCell};
-use std::rc::Rc;
 use std::ops::{Index,IndexMut};
 use crate::{Datum, FunctionType, CollectionType};
 
