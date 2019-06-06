@@ -1,4 +1,5 @@
 use std::fmt::{Display, Error, Formatter};
+use std::ops::{Index,IndexMut};
 use crate::Datum;
 
 
@@ -36,3 +37,35 @@ impl<'a> From<Datum<'a>> for f64 {
         }
     }
 }
+
+
+
+impl<'a, 'b> Index<Datum<'b>> for Datum<'a> {
+    type Output = Datum<'a>;
+
+    fn index(&'a self, index: Datum<'b>) -> &'a Self::Output {
+        use Datum::*;
+        match index {
+            Number_(n) => {
+
+            },
+            String_(s) => {
+
+            },
+            _ => {
+
+            }
+        }
+        Datum::none()
+    }
+}
+
+// impl IndexMut<Side> for Balance {
+//     fn index_mut<'a>(&'a mut self, index: Side) -> &'a mut Self::Output {
+//         println!("Accessing {:?}-side of balance mutably", index);
+//         match index {
+//             Side::Left => &mut self.left,
+//             Side::Right => &mut self.right,
+//         }
+//     }
+// }

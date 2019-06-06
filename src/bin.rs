@@ -1,7 +1,6 @@
 use any_rust::Datum as any;
 
 
-
 fn main() {
 
     let c = any::collection(vec![
