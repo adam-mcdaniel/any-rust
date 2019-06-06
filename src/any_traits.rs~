@@ -1,7 +1,6 @@
 use std::fmt::{Display, Error, Formatter};
 use std::sync::Arc;
 use std::cell::{RefCell};
-use std::rc::Rc;
 use std::ops::{Index,IndexMut};
 use crate::{Datum, FunctionType};
 
@@ -116,12 +115,12 @@ impl<'a, 'b> IndexMut<Datum<'b>> for Datum<'a> {
 }
 
 
-impl<'a> From<Datum<'a>> for FunctionType<'a> {
-    fn from(datum: Datum<'a>) -> Self {
+impl<'a> From<Datum<'a>> for &FunctionType<'a> {
+    fn from(datum: Datum) -> Self {
         use Datum::*;
         match datum {
-            Function_(f) => f.clone(),
-            _ => Arc::new(|d: Datum| {d})
+            Function_(f) => &f,
+            _ => &Arc::new(|d| {d})
         }
     }
 }

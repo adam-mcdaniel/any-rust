@@ -1,13 +1,9 @@
-use std::cell::{RefCell,};
-use std::collections::HashMap;
-use std::sync::Arc;
-use std::rc::Rc;
+use std::cell::{RefCell,}; use std::collections::HashMap; use std::sync::Arc;
 
-pub type CollectionType<'a> = Vec<Datum<'a>>;
-pub type StringType = String;
-pub type NumberType = f64;
-pub type FunctionType<'a> = Arc<dyn 'a + Fn(Datum) -> Datum>;
-pub type TableType<'a> = RefCell<HashMap<StringType, RefCell<Datum<'a>>>>;
+
+type CollectionType<'a> = Vec<Datum<'a>>; type StringType = String; type 
+NumberType = f64; type FunctionType<'a> = Arc<dyn 'a + Fn(Datum) -> Datum>; type 
+TableType<'a> = RefCell<HashMap<StringType, RefCell<Datum<'a>>>>;
 
 
 #[derive(Clone)]
